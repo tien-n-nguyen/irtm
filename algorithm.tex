@@ -1,0 +1,266 @@
+\section{Algorithms for initial training, detecting, and incremental updating}
+\label{algorithm}
+
+This section presents our algorithms for three aforementioned tasks:
+initial training, detecting, and incremental updating. Before
+presenting the algorithms (Section IV.B), let us describe a core step
+in all 3 algorithms, that is, to determine the hidden (latent) topic
+assignment $z_d$ of each bug report $d$ based on the provided data,
+i.e. the words $w_d$ of each bug report and some recorded duplication
+indicators $y_{d,d'}$s. Once the topic assignments ($z_d$s) are
+inferred for all documents, we could estimate their topic proportions
+($\theta_d$), the per-topic word distribution $\phi_t$ for each topic
+$t$, the duplication indicating function $\psi(d,d')$, and thus, the
+duplication indicators $y_{d,d'}$ of all pairs of documents.
+
+\subsection{Sampling-based Inference of Hidden Topic Assignment}
+
+%Direct inference of the hidden topic assignment for each document is
+%intractable, thus, 
+
+Instead of using variational inference for the hidden topic assignment
+as in LDA~\cite{lda} and RTM~\cite{RTM}, we choose an approximate
+approach called {\em Gibbs sampling}~\cite{gibb}. That is, the
+posterior probability $P(z_d|w_d, y_{d,d'})$ is estimated by randomly
+choosing the value for each element $z_{d,n}$ of $z_d$,
+element-by-element, based on a distribution calculated from other
+sampled values, until $P(z_d|w_d, y_{d,d'})$ is stationary. The choice
+of Gibbs sampling also allows us to efficiently perform incremental
+training for new data.
+
+%A detailed description of this technique can be found in~\cite{gibb}.
+
+%That is, we estimate the posterior probability/likelihood $P(z_d|w_d,
+%y_{d,d'})$ by randomly choosing the value for each
+%element $z_{d,n}$ of $z_d$, element-by-element, based on a distribution
+%calculated from other sampled values, until such likelihood
+%($P(z_d|w_d, y_{d,d'})$) is stationary.
+
+%Once $z_d$ of each document is being sampled, $\theta_d$ and $\phi_t$ are also estimated based on such $z_d$s.
+
+%In this task, the input includes: term vector $w_d$ of each bug
+%report, and duplication indicators $y_{d,d'}$ of some pairs of
+%manually-identified duplicate bug reports, and chosen parameters
+%$\alpha, \beta, \eta$. The output includes: topic assignment vector
+%$z_d$ and topic proportion $\theta_d$ of each bug report, per-topic
+%term distribution $\psi_t$ of each topic, and duplication indicating
+%values $\psi(\theta_d,\theta_d')$ for every pair of reports.
+
+Specifically, the sampling-based inference of $z_d$ for each document
+$d$ is as follows. The elements of $z_d$ are initially assigned with
+random values. Then, each of its elements $z_{d,n}$ is sampled based
+on a conditional distribution calculated from the most recent sampled
+values of \emph{all other} elements, denoted by $z_{d,-n}$, and other
+given information, i.e. $w_d$ and all $y_{d,d'}$s. Let us use $P(n,t)
+= P(z_{d,n}=t|z_{d,-n},w_d,y_{d,d'})$ to denote the probability that
+topic $t$ is assigned for the $n^{th}$ position of $d$, given
+all such information. This probability depends on:
+
+\begin{enumerate}
+
+\item The assignments in other positions: $P(z_d[n]=t|z_d[-n])$,
+
+\item The word $x$ chosen for position $n$: $P(w_{d,n} = x|z_{d,n} = t,z_{d,-n},w_{d,-n})$,
+
+\item The duplication indicators of $d$ to all other documents:
+   $P(z_{d,n} = t|z_{d,-n},z_{d'}, y_{d,d'})$ of all documents~$d'$.
+
+\end{enumerate}
+
+\vspace{0.03in}
+\noindent {\bf Computation.} Those probabilities are computed as
+follows:
+
+1. $z_{d,n}$, by the generative process, is drawn based on $\theta_d$,
+   while $\theta_d$ is drawn from $Dir(\alpha)$ and can be estimated
+   based on $z_{d,-n}$. Let us use $\aleph(z,t)$ to denote the count
+   function, i.e. the number of elements of vector $z$ having the
+   value $t$. Due to the properties of Dirichlet distribution, we have
+$$P_1(n,t) = P(z_{d,n} = t|z_{d,-n}) \approx \frac {\aleph(z_{d,-n},t) + \alpha} {\sum\nolimits_{k = 1}^K ({\aleph(z_{d,-n},k)} + \alpha)}$$
+$$ = \frac {\aleph(z_{d,-n},t) + \alpha} {N_d - 1 + K.\alpha}$$
+
+In other words, the topic proportion $\theta_d$ of document $d$ is
+estimated by counting the assignments on $z_{d,-n}$, smoothened by
+$\alpha$. Then, the probability of topic assignment $z_{d,n}$ is computed based
+on such proportion.
+
+% the ?expectation? of the distribution of $\theta_d$!!!
+%(Tung: I'm not much sure about this).
+
+2. $w_{d,n}$, by the generative process, is drawn based on $\phi_t$ if
+   $z_{d,n} = t$. Let us use $w_{d,-n}(t)$ to denote the vector of words
+   in $w_{d,-n}$ that are assigned to topic $t$. Due to the properties
+   of Dirichlet distribution, we have
+$$P_2(n,t)=P(w_{d,n}=x|z_{d,n}=t,z_{d,-n},w_{d,-n})$$ $$\approx \frac
+{\aleph(w_{d,-n}(t),x) + \beta} {\sum\nolimits_{y = 1}^V
+{(\aleph(w_{d,-n}(t),y) + \beta)}}= \frac {\aleph(w_{d,-n}(t),x) +
+\beta} {N^{-}_{d,t} + V.\beta}$$ in which $N^{-}_{d,t}$ is the number
+of words in $w_{d,-n}$ that are assigned to topic $t$.
+In other words, when the position $n$ is assigned to topic $t$, we
+emphasize only to the words in the document at other positions
+assigned to topic $t$ (i.e. $w_{d,-n}(t)$), estimate the selection
+probability of each word based on $w_{d,-n}(t)$ (smoothened by
+$\beta$), and calculate the likelihood that the word $x$ has been
+chosen for position $n$ (observed from data) based on that
+distribution.
+
+3. $y_{d,d'}$ is drawn based on $\psi(d, d')$ by the generative
+   process. Given $z_{d,-n}$ and $z_{d'}$, we can estimate $\theta_d$
+   and $\theta_d'$. Thus:
+\[
+\tiny
+P_3(n,t,d') = P(z_{d,n} = t|z_{d,-n},z_{d'}, y_{d,d'}=1) \propto \] \[ \frac {P(y_{d,d'}=1|z_{d,n}=t, z_{d,-n},z_{d'})} {P(y_{d,d'}=1|z_{d,-n},z_d')} = \frac {\psi(d,d')} {\psi(d_{-n},d')}
+\]
+
+Since $\theta_d$ and $\theta_{d'}$ could be estimated based on $z_d$ and $z_{d'}$, by definition, $\psi(d,d') \approx exp(S)$ and $\psi(d_{-n},d') \approx exp(S')$ with
+
+$S = {\sum_{k=1}^K(\eta_k.\frac {\aleph(z_d,k)} {N_d}. \frac {\aleph(z_{d'},k)} {N_{d'}} + \nu)}$
+
+\noindent and
+
+$S_{-n} = {\sum_{k=1}^K(\eta_k.\frac {\aleph(z_{d,-n},k)} {N_d}. \frac {\aleph(z_{d'},k)} {N_{d'}} + \nu}))$
+
+\noindent Therefore, 
+$$\frac {\psi(d,d')} {\psi(d_{-n},d')} = exp(S - S_{-n})
+= exp({\eta_t.\frac 1 {N_d}.\frac {\aleph(z_{d'},t)} {N_{d'}}})$$
+
+\noindent because there is only one difference between $S$ and $S_{-n}$ at position $n$ and $z_{d,n} = t$).
+The formula means that, if $d$ and $d'$ are recorded as duplicate
+reports, the higher proportion of topic $t$ in $d'$, the higher the
+probability that a position in $d$ is assigned to topic $t$.
+
+%[TUNG: We have the last term from reducing the formula of $\psi$.
+%Note that: the topic assignments in the [tu so] and [mau so] has only a difference at for topic $t$ at location $n$].
+
+Using all the above, we can calculate the distribution for sampling
+topic assignment at each position of $d$ as:
+
+$$P(n,t) \propto P_1(n,t).P_2(n,t). \prod_{d': y_{d,d'}=1} P_3(n,t,d')(*)$$
+
+The last product is applied for all documents initially specified as
+the duplications of $d$, i.e. all $d'$s such that $y_{d,d'} = 1$. This
+is used for the pairs of reports that were recorded as duplicate
+ones. For the documents having no observed duplication indicators to
+$d$, we consider their indicators as un-observed, thus, ignore their
+impact in topic assignment of $d$.
+
+\subsection{Algorithms for Three Phases}
+
+Let us describe the algorithms for three core tasks in {\model}.
+
+%the usage of
+%{\model}.
+
+%^\vspace{0.05in}\noindent\textbf{1. Training with Initial Data}
+\subsubsection{Training with Initial Data}
+
+Using the previous core step, the initial training algorithm is as
+follows:
+
+\begin{itemize}
+
+\item Step 1. Initialize randomly the values for all $z_d$s.
+
+\item Step 2. For each $d$, sample $z_d$ element-by-element following
+distribution (*) until it is stationary.
+
+\item Step 3. Estimate the topic proportion of each document: $\theta_{d,t}
+\approx \frac {\aleph(z_d,t)} {N_d}$.
+
+\item Step 4. Estimate the word distribution for each topic: $\phi_{t,x}
+\approx \frac {\sum_{d}{\aleph(z_d(t),x)}} {\sum_{d} {N_d(t)}}$,
+i.e. count the assignments $N_d(t)$ of topic $t$ in each document $d$,
+sum up for the whole collection, and estimate the proportion of
+assignments using word $x$.
+
+\end{itemize}
+
+%\vspace{0.05in}\noindent\textbf{2. Detecting Duplicate Bug Reports}
+
+\subsubsection{Detecting Duplicate Bug Reports}
+
+Given a new report $d$, we need to determine if it is
+duplicate of a bug report(s) in the historical data. The
+detection process is as follows:
+
+\begin{itemize}
+
+\item Step 1. Initialize the values for $z_d$.
+
+\item Step 2. Sample $z_d$ following the distribution (*) until it is
+stationary.
+
+\item Step 3. Estimate the topic proportion of $d$: $\theta_{d,t} \approx
+\frac {\aleph(z_d,t)} {N_d}$.
+
+\item Step 4. For any other document $d'$ in the collection, calculate the
+duplication indicating function $\psi$ on the pair $(d, d')$ to infer
+their duplication indicator $y_{d,d'}$.
+
+\end{itemize}
+
+Note that, $d$ could be a bug report in the historical data. In this
+case, we could detect the not-yet-identified duplicate reports among
+the filed ones, and the steps 1-3 are not needed since they were
+done in the training phase.
+
+%\vspace{0.05in}\noindent\textbf{3. Updating with Newly Available Data}
+
+\subsubsection{Updating with Newly Available Data}
+
+%In practice, the bug reports are constantly filed. New information on
+%the duplicate reports is also provided. For example, the users could
+%manually identify some new duplicate bug reports. They could verify
+%some of the automatically detected duplications by our tool as true
+%duplications. The model, thus, needs to be updated with this newly
+%available information. Otherwise, if the initially trained model is
+%used to process new data, that model might not fit well.
+
+%because it is trained with old data, which might be totally irrelevant
+%in the new data.
+
+%A naive updating method is to completely re-train the model on both
+%already-trained and newly available data. Since the new data is
+%provided with high rate and volume, and the trained data is also of
+%high volume, this naive approach would be very inefficient. However,
+%if we train the model with only new data, we might miss the potential
+%duplications between the new and the existing bug reports. Thus, our
+%balanced approach is to select a representative portion of existing
+%data to re-train with new data and use the trained information to
+%update the global parameters (e.g. per-topic word distribution) as
+%suggested in~\cite{canini09}.
+
+Based on this strategy, our algorithm for incremental updating is as
+follows. The input of our algorithm includes the input and output from
+the last training step. In addition, the input also includes new data,
+i.e. newly filed bug reports and newly provided duplication
+indicators (could be among either recorded or new reports). The output
+is similar as in the initial training phase.
+
+\begin{itemize}
+
+\item Step 1. Select all the existing/historical bug reports that are
+indicated as duplications via the newly provided duplication indicators --
+if exists.
+
+\item Step 2. Randomly select another portion of historical bug reports
+until having a total of $r\%$ of existing bug reports. When a bug report
+is selected, we also select all its duplicate reports.
+
+\item Step 3. Combine the selected bug reports and newly filed ones, and then
+train the model on this data using the algorithm in Section~3.1.
+
+\item Step 4. Re-estimate the parameters of the model.
+
+\end{itemize}
+
+$\theta_d$ is only re-estimated for the reports selected in
+re-training. However, $\phi_t$ needs to be re-estimated for all bug
+reports. This is done without re-counting the non-selected documents
+by storing the counting values from the last training. For example,
+let $n_0$, $n_1$, and $n_2$ are the numbers of words $x$ assigned to
+topic $t$ in the last trained data, the old data selected for
+retraining, and the re-trained data, respectively. The number of words
+$x$ assigned to topic $t$ after retraining is $n_0 - n_1 + n_2$. Since
+$n_0$ is stored, we only need to count $n_1$ and $n_2$ on the data
+used for re-training, which is much smaller than the whole data.

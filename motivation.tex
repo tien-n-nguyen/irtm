@@ -1,0 +1,181 @@
+\begin{figure}[t]
+\sf
+\small
+\textbf{ID}:000002; \textbf{CreationDate}:Wed Oct 10 20:34:00 CDT 2001; \textbf{Reporter}:Andre Weinand
+
+\textbf{Summary}: Opening repository resources doesn't honor type.
+
+\textbf{Description}:Opening repository resource always open the default text editor and doesn't honor any mapping between resource types and editors. As a result it is not possible to view the contents of an image (*.gif file) in a sensible way.
+\rm
+\caption{Bug report BR2 in Eclipse project}
+\label{fig:br1}
+\end{figure}
+
+
+
+\section{Motivating Example}
+\label{sec:example}
+
+Let us begin with an example of duplicate bug reports that
+motivate our approach. Generally, a bug report is a record in a
+bug-tracking database, containing several descriptive fields about the
+bug(s). Important fields in a bug report include 1) a unique
+identification number of the report (\textbf{\sf ID}), creation
+time (\textbf{\sf CreationDate}), the reporting person (\textbf{\sf
+Reporter}), and most importantly, a short summary (\textbf{\sf
+Summary}) and a full description (\textbf{\sf Description}) of the
+bug(s).
+
+\vspace{0.05in}\noindent\textbf{Observations on a bug report}
+Figure~\ref{fig:br1} displays an example of an already-fixed bug
+report in Eclipse project. As shown, this bug report was assigned the
+ID of 2 and reported on 10/10/2001 by Andre Weinand for a bug on
+Eclipse v2.0. It described that the system always used the default
+text editor to open and display any resource file (e.g. a GIF image)
+stored in the repository despite its type. Analyzing the textual
+description, we have the following observations:
+
+%functions/technical aspects/concerns/featues 
+
+\begin{enumerate}
+
+\item This bug report is about two technical functions in Eclipse:
+\emph{manipulating} (MAN) and \emph{versioning} (VCM) of software
+artifacts. In general, MAN involves the operations such as \emph{open},
+\emph{view}, \emph{edit}, and \emph{save} on files/resources. VCM
+involves the operations such as \emph{connect}, \emph{commit},
+\emph{update}, etc.
+
+\item The bug occurred in the code implementing MAN. That is, the operation
+\emph{open} on a resource file in the repository was incorrectly
+implemented.
+%Technically, the system maintains no mappings between resource types
+%and editors, thus, it uses the default text editor to open all kinds
+%of resource.
+
+\item In the bug report BR2, the technical function MAN can be recognized
+in its contents via the words that are relevant to MAN such as
+\code{editor}, \code{open}, \code{view}, \code{content},
+\code{resource}, \code{file}, \code{text}, and \code{image}.
+Similarly, the description also contains relevant terms to VCM such as
+\code{repository}, \code{resource}, and \code{file}. Note that, some
+words such as \code{resource} and \code{file} are used to describe
+both functions MAN and VCM. If considering bug reports as textual
+documents, we can view the described technical functions as the
+\textbf{topics} of those documents.
+
+\end{enumerate}
+
+\begin{figure}
+\sf
+\small
+\textbf{ID}:009779; \textbf{CreationDate}:Wed Feb 13 15:14:00 CST 2002; \textbf{Reporter}:Jeff Brown
+
+\textbf{Resolution}:DUPLICATE
+
+\textbf{Summary}: Opening a remote revision of a file should not always use the default text editor.
+
+\textbf{Description}: \code{OpenRemoteFileAction} hardwires the editor
+that is used to open remote file to
+\code{org.eclipse.ui.DefaultTextEditor} instead of trying to find an
+appropriate one given the file's type.
+
+You get the default text editor regardless of whether there are
+registered editors for files of that type -- even if it's binary. I
+think it would make browsing the repository or resource history
+somewhat nicer if the same mechanism was used here as when files are
+opened from the navigator. We can ask the Workbench's
+\code{IEditorRegistry} for the default editor given the
+filename. Use text only as a last resort (or perhaps because of a
+user preference).  \rm
+\caption{Bug report BR9779, a duplication of bug report BR2 in Eclipse}
+\label{fig:br2}
+\end{figure}
+
+\vspace{0.04in}\noindent\textbf{Observations on a duplicate bug
+report} Figure~\ref{fig:br2} presents bug report ID 9779, filed on
+02/13/2002 by a different reporter, Jeff Brown. This report was
+determined by Eclipse's developers as reporting the same bug as in
+BR2. Analyzing the contents of BR9779 and comparing to those of BR2,
+we can see that
+
+%have the following observations:
+
+\begin{enumerate}
+
+
+\item BR9779 also describes two aspects/functions: MAN - manipulating and
+VCM - versioning of software artifacts. MAN was also reported to be
+buggy.
+
+\item The terms that are used to describe MAN are similar to those in BR2,
+e.g. \code{open}, \code{file}, and \code{editor}. However, the terms
+describing VCM are somewhat different, such as \code{remote},
+\code{revision}, or \code{history}.
+
+\item BR9779 provides additional information about the bug. It notifies
+that \code{OpenRemoteFileAction}, the class responsible for opening
+a remote file, is directly associated with
+\code{org.eclipse.ui.DefaultTextEditor}, i.e., it always uses the
+default editor to open a remote file. The report also provides a
+fixing suggestion: asking Workbench's \code{IEditorRegistry} for the
+default editor given the filename.
+%Based on those two examples and five observations, we imply/conclude
+%that:
+%1. Duplicate bug reports do exist in real-world software development (the bug discussed here is also duplicately reported in BR000094 and BR015392). This is because the software system tend to be used by many independent people in many different environment and usage settings. Thus, an existing bug is easily seen/experienced and reported by several people.
+
+\end{enumerate}
+
+\vspace{0.03in}\noindent\textbf{Implications} The detection of such
+duplicate bug reports has several benefits in software development and
+maintenance. First, the duplicate bug reports, reported by people with
+different points of view and experience could provide different kinds
+of information about the bug(s), thus, help in the debugging and
+fixing process. Importantly, detecting duplicate bug reports would
+help developers to avoid redundant bug fixing efforts.
+
+However, manual detection of duplicate bug reports is highly
+time-consuming. For a large-scale project, the number of bugs and the
+bug reporting rate are fairly high. For example, in Eclipse, there are
+currently more than 363K bug reports and there are from 2-5 newly
+filed bug reports every hour. To detect whether a new bug report is a
+duplication of some existing bug report, one would need to analyze and
+compare it with all those bug reports, both new and existing
+ones. Detection on the whole dataset would result in the analysis of
+$O(N)$ and the comparison of $O(N^2)$, with $N$ is the total number of
+bug reports. Therefore, an automatic detection of duplicate bug
+reports is highly desirable.
+
+The above example shows us that the detection of duplicate bug reports
+could be based on their technical topics, rather than the concrete
+terms/words that are used. Intuitively, topics are \emph{latent}, {\em
+semantic} features, while terms are \emph{visible, textual} features
+of the documents. One could expect that the former would describe the
+similarity of the documents more accurate than the latter. For
+example, BR2 and BR9779 describe the same topic, but they might use
+\emph{different} terms for the same topic. In BR9779, the words
+\code{remote}, \code{revision}, and \code{history} are used to
+describe VCM, while they do not appear in BR2.
+
+%Thus, term-based assessment of those two documents might be less
+%accurate/effective than topic-based assessment.
+
+%Actually, using tfidf, a term-weighting scheme, we have calculate the
+%cosine similarity of BR000002 and BR009779 to be 0.5???, too small to
+%be considered as similar documents. In our approach, the topic-based
+%probability that they are duplicated is estimated as 0.8???.
+% topic EDIT in BR2 >> topic EDIT in BR1. (Buggy one!!!)
+
+Based on aforementioned observations, we propose to use a topic
+modeling approach for the automatic detection of duplicate bug
+reports. We utilize and adapt a probabilistic, generative topic model
+called {\em Relational Topic Model (RTM)}~\cite{RTM} for the analysis
+and inference of the hidden technical topics within bug reports and
+the relation of duplicate reports based on their topics. To support
+software evolution as new reports are constantly filed and new
+duplication information is available, we extend RTM into {\em
+incremental} RTM (iRTM) in which the trained model can be quickly
+updated without fully re-training.
+
+%Next, let us detail our model.
+

@@ -1,0 +1,154 @@
+\section{Related Work}
+
+A related work to {\model} is the Support Vector Machine (SVM)-based
+approach from Sun {\em et al.}~\cite{davidlo10}.  In the training
+phase of their model, all the pairs of duplicate bug reports are
+formed and considered as the positive samples. All other pairs of
+non-duplicate bug reports are used as the negative samples. For each
+sample (i.e. a pair of reports), a total of 54 features are
+extracted. Each feature is represented by the sum of all inverse
+values of the frequencies of documents containing terms or bi-grams
+(i.e. two consecutive terms) that appear in the summaries and/or
+descriptions of both bug reports in the sample. All positive and
+negative pairs/samples are used to train and derive the parameters of
+a SVM model. In the prediction phase, as a new report arrives, it
+would be paired with all existing reports. Then, each pair would be
+fed into the trained SVM model and be classified as positive or
+negative. Positive pairs imply duplicate reports. Finally, if a new
+bug report is predicted by SVM model as duplicate, it is compared
+with existing bug reports to determine its master bug report.
+
+There are key advances of {\model} over their SVM model. First, their
+model is not suitable for software evolution. It cannot work in an
+{\em incremental} manner. For new bug reports, their model requires
+complete re-training. As the project evolves, the bug report data gets
+increasingly large, the training set continually grows, and the
+re-training time will keep increasing significantly. The reason is
+that as more reports are added, the numbers of (negative and positive)
+pairs/samples will dramatically increase due to the nature of pairing
+in the SVM model. With the speed of 3-5 new bug reports per hour
+(e.g. in Eclipse)~\cite{davidlo10}, their time cost of for fully
+re-training is much higher than {\model}'s updating time.
+
+%not quite practical. In contrast, {\model} can incrementally update
+%its parameters in very short time as new data is available.
+
+Another disadvantage of their approach is that, the SVM model predicts
+that a new report is a duplication of multiple existing bug reports
+but requires a second phase to rank which one is more likely than
+others. That is, after predicting the duplication of a new bug report,
+their tool performs a second phase to determine the list of potential
+master reports. This adds extra computational time. In contrast,
+{\model} is able to rank potential master reports based on the
+probabilities of generating corresponding pairs of reports. The reason
+is that {\model} treats the problem of detecting duplication reports
+as a {\em ranking problem}, while their SVM-based approach considers
+it as a {\em classification one}. Moreover, in contrast to our
+generative model, their model is SVM, a discriminative model. The
+quality of their results depends very much on the positive and
+negative sets of samples. Because the percentage of duplicate bug
+reports is much smaller than that of non-duplicate ones in the
+project, the negative set will grow faster and their approach faces
+the issue of un-balance between positive and negative samples. With
+the generative approach, {\model} does not have to deal with negative
+and positive sample sets. Instead, it decides the probability of
+generating a pair of duplicate bug reports.
+
+Jalbert and Weimer~\cite{weimer08} use a binary classifier model for
+predicting duplicate bug reports. They utilizes a linear regression
+over {\em textual} features of bug reports computed from the
+frequencies of terms in bug reports.
+%%%To make a binary classifier, they specify an output value cutoff over
+%%%such features that distinguishes between duplicate and non-duplicate
+%%%status.
+Similar to Sun {\em et al.}'s model, this model requires complete
+re-training for new bug reports.
+%, which is not quite efficient in practice.
+Moreover, their model relies solely on {\em textual similarity}, while
+{\model} focuses more on the underlying {\em technical topics} of bug
+reports to determine the duplications.
+%Finally, their model is discriminative, thus, facing the issue of
+%unbalanced positive and negative sample sets of bug reports.
+
+One of the first techniques to detect duplicate bug reports is Runeson
+{\em et al.}'s~\cite{runeson07}. In contrast to aforementioned machine
+learning (ML) approaches, Runeson {\em et al.}  utilize a natural
+language processing (NLP) approach.
+%The bug reports are parsed, stemmed, and the stopwords are
+%removed.
+Each report is modeled by a vector of textual features. The
+feature of such a vector at a position corresponding to a term is
+computed based on Term frequency-Inverse document
+frequency~\cite{salton73}. Vector similarity is used to measure the
+similarity among bug reports.
+%Given a bug report under investigation, their tool returns similar bug
+%reports based on the vector similarities between the new report and
+%the existing ones.
+Hiew~\cite{hiew06}'s approach for duplicate bug report detection is
+based on information retrieval (IR) as in Runeson's. However, it uses
+incremental clustering for further grouping of duplicate reports.
+%is based on incremental clustering, which is quite similar to
+%information retrieval. The main difference is that Hiew’s approach
+%further considers the detected duplicate bug-report pairs/groups as
+%clusters. Thus, when calculating similarities between a new report
+%and existing bug reports, each detected cluster is considered as a
+%whole rather than as several individual existing bug reports. That
+%is to say, for each detected cluster, this approach will calculate one
+%similarity between the new report and the detected cluster instead
+%of calculating several similarities between the new report and all
+%the reports in the cluster.
+Comparing to those approaches, {\model} operates at a higher
+abstraction level by comparing the underlying technical topics in
+reports, instead of their terms. Moreover, ML approaches have been
+shown to outperform NLP/IR approaches~\cite{davidlo10}. Wang {\em et
+al.}~\cite{taoxie08} combine NLP with execution trace information in a
+report.
+%%%They utilize both Tf and Idf for textual feature extraction.
+Despite performance improvement, their approach is not always
+applicable in the cases where execution information considered in
+their tool is not available.
+%%%and hard to collect,
+%%%especially for binary programs. Sun {\em et al.}~\cite{davidlo10}
+%%%reported that the percentage of reports having execution information
+%%%is very low (0.83\%).
+
+Other researchers also focus on bug reports. It is suggested that
+duplicate bug reports complement to one another to help
+in bug fixing~\cite{bettenburg-icsm-2008}. 
+%%Bettenburg {\em et al.}~\cite{rahul08} analyzed information mismatch
+%%between what developers need and what users supply to determine good
+%%properties in bug reports. 
+Structural information from bug reports has been shown to be
+useful~\cite{bettenburg-msr08,ko06}.
+%%Hooimeijer and Weimer~\cite{weimer-ase07} develop a statistic-based
+%%model to automatically predict the quality of bug reports.
+%Ko {\em et al.}~\cite{ko06} perform linguistic analysis on bug reports
+%and suggest more structure for their contents.
+Other researchers categorize bug reports based on types, quality, or
+severity~\cite{rahul08,weimer-ase07,anvik06,andy-pod03,cubranic04,menzies08,bettenburg-eclipse07,weimer06,lucca02,fischer03,Sandusky04bugreport}.
+%However, none of them addresses the automatic detection of duplicate
+%bug reports.
+From bug reports, prediction tools~\cite{weiss07,skim06} can tell
+whether a bug could be resolved with certain fixing time. Approaches
+for automatic assignments of bug fixers include
+~\cite{anvik06,Canfora05howsoftware}.
+%canfora-sac06}.
+%%Other approaches aim to study the relationships among bug
+%%reports~\cite{fischer03,Sandusky04bugreport}. 
+Gethers and Poshyvanyk~\cite{gethers10} utilize RTM in capturing the
+latent topics in classes and their relationships.
+
+
+
+
+
+%and Whitehead claim that the time it takes to fix a
+%bug is a useful software quality measure [8]. They measure
+%the time taken to fix bugs in two software projects. We
+%predict whether a bug will eventually be resolved as a duplicate
+%and are not focused on particular resolution times or
+%the total lifetime of real bugs.
+
+
+
+

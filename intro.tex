@@ -1,0 +1,126 @@
+\section{Introduction}
+\label{intro}
+
+ %In software development and maintenance, bug fixing is a
+%time-consuming, yet unavoidable task. According to ???, developers
+%usually spend more than 50\% of the working time for bug fixing,
+%increasing the development cost and time-to-market of the software
+%product. Nevertheless, if the bugs are not carefully fixed, much more
+%severe consequences might occur. For example, the US government
+%organization, business, and families lose ??? billions dollars
+%annually due to software faults.
+
+%If some of such behaviors exist/occur, they are reported as bug with
+%the corresponding running phenomenon/additonal information
+%(environment, input data, running trace,...).
+
+In software development and maintenance, bug fixing is vital in
+producing high-quality software products. Bug fixing happens in both
+development and post-release time. In either case, the developers,
+testers, or end-users run a system and detect its incorrect
+behavior(s) that do not follow the system's requirements or their
+expectations. Then, they report such occurrences in a bug report that
+are often recorded in a bug-tracking database. Based on the
+information in a bug report, developers will analyze the phenomenon,
+locate the buggy code (debugging), and correct it to produce the
+correct behaviors (bug fixing).
+
+%Based on such bug reports, respondence developers will do bug fixing:
+%analyzing the bug report the phenomenon, locating and understanding
+%the code causing the incorrect behaviors (debugging) and correcting
+%such code to produce correct behaviors (fixing).
+
+Generally, there are several users interacting with the same system
+and reporting its bugs. Therefore, a bug is occasionally reported by
+more than one reporters, resulting in duplicate bug reports. Detecting
+whether a new bug report is a duplicate one is crucial because it
+helps reduce the maintenance efforts from developers (e.g. if the bug
+is already fixed) as well as provides additional information in the
+bug fixing process (e.g. if the bug is not yet fixed). However, it is
+not straightforward to automatically detect duplicate bug
+reports. With different input data, usage environments or scenarios,
+an erroneous behavior might expose as different phenomena
+(e.g. different outputs, traces, or screen views). Moreover, different
+reporters might use different terminologies and styles, or report on
+different elements to describe the same phenomena.
+% (for example, some includes running
+% traces, some provides screen captures).
+%Therefore, not many bug reports are similarly in text.
+Therefore, several duplicate bug reports are not very textually
+similar.
+
+%[Tung: we should show this in the motivating examples]
+
+%To reduce the human effort on the problem of detecting duplicate bug
+%reports,
+%In textual artifacts, we consider the technical aspects to be describe
+%as the topics of such artifacts.
+
+To automate the detection process of duplicate bug reports, we propose
+a probabilistic approach. In our approach, each bug report is
+considered as a textual document describing one or more technical
+aspects/functionality of a system, in which some of them might be
+erroneously implemented. The reports similarly describing the same
+erroneous technical aspects are considered as duplicate
+ones. Considering the technical aspects as the topics of those
+text-based bug reports, we utilize Relational Topic Model
+(RTM)~\cite{RTM}, a probabilistic, generative model, to formulate
+their topic structures and duplication indicators. We use Gibbs
+sampling~\cite{gibb} to train the model on historical data with
+identified duplicate bug reports and then detect other
+not-yet-identified duplicate ones.
+
+%infer the hidden topics of each bug report in the given collection and the duplication indicators between any pair of bug reports in the collection. 
+
+In reality with software evolution, new reports are continually filed
+and new duplicate information could also be provided. The trained
+model should be updated with that new information. Therefore, we
+extend RTM into {\em incremental} RTM (iRTM) in which the trained
+model can be updated using a combination of a portion of existing data
+(historical reports and duplication indicators) and newly provided
+data (i.e. all new reports and additional duplication
+indicators). This helps save time on complete re-training on all old
+and new data, which could be very costly as the number of bug reports
+increases with a relatively high pace (for example, in Eclipse, 3-5
+new bug reports are often filed every hour).
+
+% while achieves the comparable detection accuracy.
+%This strategy saves a large amount of time for completely re-training
+%on input data that includes such new reports and duplication
+%indicators.
+
+Our empirical evaluation on several large, real-world systems shows
+that {\model} outperforms the state-of-the-art approach from Sun {\em
+et al.}~\cite{davidlo10} in terms of both accuracy and time
+efficiency. It can achieve up to 90\% top-10 accuracy, with updating
+time within 0.14 seconds per new bug report on average. The updating
+time for our model with new data is about 5-8 times smaller than the
+re-training time of the Sun {\em et al.}'s approach
+in~\cite{davidlo10}. The contributions of this paper include:
+
+\begin{enumerate}
+
+\item {\model}, an extended model from RTM to formulate the problem of
+detecting duplicate bug reports.
+%a new probabilistic model, formulating the generation process of bug
+%reports and duplicate ones in software evolution. 
+{\model} captures semantically the technical topics in the bug reports
+and formulates the semantic similarity measure among duplicate reports
+based on such topic structures.
+
+\item Incremental algorithms for {\model} in a) training the model on
+historical bug reports and identified duplications, b) detecting
+not-yet-identified duplicate reports, and c) updating the trained
+model when new data is available. Such incremental solution supports
+well the detection of duplicate bug reports in evolving software.
+
+\item An empirical evaluation showing the accuracy, scalability, and
+time efficiency of {\model}.
+
+\end{enumerate}
+
+The next section presents a motivating example. Section~3 describes
+the details of our model. Section~4 presents the algorithm for
+incremental training of the model and detection of duplicate bug
+reports. Section 5 discusses our evaluation. Related work is in
+Section 6, and conclusions appear last.
