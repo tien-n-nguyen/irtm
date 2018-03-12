@@ -1,0 +1,127 @@
+ %\subsection{Interesting Case Studies}
+
+%Let us discuss a few real-world examples that we found during our
+%experimental studies.
+
+
+
+%Figure {\ref{bugreport225337}} shows two duplicate bug reports
+%detected by {\model}. Except the terms NPE
+%(\code{NullPointerException}) and \code{StructuredViewer}, which are
+%popular and common in the project, the two reports contain several
+%different terms because the reporters found the bug in two different
+%usage scenarios. That leads to different exception traces: one
+%involving image updating, and another on widget selection. We noticed
+%that when running BM25F model by itself, bug report \#225169 is ranked
+%8$^{th}$ in the list that could be duplicate of bug report \#225337
+%due to the dissimilarity in texts. However, after extracting topics
+%via the co-occurrences of other terms such as \code{startup},
+%\code{first time}, \code{RSE perspective}, \code{wizard}, etc in the
+%previous duplicate reports (e.g. from bug report \#218304, not shown),
+%{\model} ranked it at the highest position and detected them as
+%duplicate ones.
+
+%\begin{figure}
+%\vspace{2mm}
+%\sf
+%\small
+%
+%\textbf{Bug Report \#225169}\\
+%\textbf{Summary}:  Get NPE when startup RSE on a new workspace\\
+%\textbf{Description}:\\
+%	Using Eclipse M5 driver and RSE I20080401-0935 build. Start
+%	eclipse on a new workspace, and switch to RSE perspective. I
+%	could see the following error in the log. But
+%	otherwise, things are normal.\\ java.lang.NullPointerException
+%	at\\
+%	org.eclipse.....getImageDescriptor(SystemView...java:123)\\
+%	...\\ at
+%	org.eclipse....doUpdateItem(AbstractTreeViewer.java:1010)\\ at
+%	org.eclipse....doUpdateItem(SafeTreeViewer.java:79)\\ at
+%	org.eclipse....run(StructuredViewer.java:466)...\\
+%	-----------------------------------------------------------------------\\
+%\textbf{Bug Report \#225337}\\
+%\textbf{Summary}:  NPE when selecting linux connection in wizard for the first time\\
+%\textbf{Description}:\\
+%	After starting an eclipse for the first time, when I went select Linux in the
+%	new connection wizard, I hit this exception.  When I tried again a few times
+%	later, I wasn't able to hit it.\\
+%	java.lang.NullPointerException at\\
+%	org.eclipse....getAdditionalWizardPages(RSEDefault...:404)\\
+%	...\\
+%	at org.eclipse....updateSelection(StructuredViewer.java:2062)\\
+%	at org.eclipse....handleSelect(StructuredViewer.java:1138)\\
+%	at org.eclipse....widgetSelected(StructuredViewer.java:1168)...\\
+%\caption{Duplicate Bug Reports in Eclipse}
+%\label{bugreport225337}
+%\end{figure}
+
+%-------------------------------------------------------------------------
+% SECOND EXAMPLE
+%-------------------------------------------------------------------------
+
+\begin{figure}[t]
+\scriptsize
+\sf
+\small
+\textbf{Bug Report \#240790}\\
+\textbf{Summary}: [search] callers are not found when caller and callee reside in sibling Java projects\\
+\textbf{Description}:\\
+	1. create a java project "common" having one interface\\...
+	6. Client.init() is not found being a caller (search cope might be
+	"Workspace" or "Hierarchy")\\
+-----------------------------------------------------------------------\\
+\textbf{Bug Report \#250454}\\
+\textbf{Summary}:   [search] Cannot find method references between projects\\
+\textbf{Description}:\\
+	1) define 3 projects: rootProject, subProject1, and subProject2.\\
+	2) set project build depedencies such that subProject1 and subProject2 depend
+	on rootProject\\
+	...\\
+	6) Search for references to Square.f() directly from it's declaration in
+	Square.java.\\
+			6a) EXPECT: one result: ShapeUser.useShape(Shape)\\
+			6b) ACTUAL: no results\\
+	If ShapeUser is instead located in the direct derivable project dependency
+	graph for subProject1, the results are ok....\\
+			1) If Square were defined in rootProject itself, the search succeeds.\\
+			2) If Square were defined in subProject2, the search succeeds. \\
+			3) If subProject2 has a build dependency on subProject1, the search
+	succeeds.\\
+
+	Additionally, searching for references to f() from the Shape declaration
+	succeeds as defined above.  It appears the search does not go to all dependent
+	projects of the project declaring the interface.\\
+	...\\
+\caption{Duplicate Bug Reports \#250454 and \#240790}
+\label{bugreport250454}
+\end{figure}
+
+\vspace{0.04in}
+\noindent {\bf Interesting Case Studies} An example of detected duplicate bug reports 
+is in Figure~\ref{bugreport250454}. The texts in two summaries are
+different. The re-producing steps described by two bug reporters are
+totally different. As running with the BM25F model alone, bug
+report \#240790 was ranked 6th in the list of potential duplications
+of bug report \#250454. Trained with historical data via identified
+duplicate reports of \#250454 (not shown), DBTM can learn sets of
+different terms describing the same technical issue in this new
+report, which is the issue of searching objects dependent on sibling
+projects.
+
+%Final
+%More examples are shown on our project's web site.
+%(\url{http://home.engineering.iastate.edu/~anhnt/Research/DBTM/})
+
+%, real duplicate group (bug report \#240790) of bug report \#250454 is
+%ranked sixth in the ranked list of BM25f model because the two bugs do
+%not has much text similarity (they only share important word
+%\code{search}).  The duplicate group is ranked first in our experiment
+%using DBTM, since the model can learn that the two bug reports
+%\#240790 and \#250454) infer to the issue when searching objects on
+%dependent (sibling) projects.
+
+%We also find hundreds of cases where DBTM can elevate the ranked of
+%real duplicate group in the ranked list of potential duplicate groups
+%of a bug report, in comparison with BM25f model. See our website for
+%our finding.
