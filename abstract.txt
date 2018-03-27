@@ -23,3 +23,7 @@ several large, real-world systems shows that iRTM outperforms the
 state-of-the-art approach, achieving up to 90% top-10 accuracy with up
 to 8 times faster in updating its internal model as new bug reports
 arrive.
+
+Keywords: 
+
+Duplicate Bug Reports, Relational Topic Model, Incremental Model
