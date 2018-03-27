@@ -1,0 +1,25 @@
+In software development and maintenance, bug fixing is a
+time-consuming, yet unavoidable task. A bug is occasionally reported
+by more than one reporters, resulting in duplicate bug reports.
+Detecting duplicate bug reports is crucial because it helps reduce the
+maintenance efforts from developers as well as provides more
+information in the bug fixing process. In this paper, we propose an
+automatic approach to this problem. In our approach, a bug report is
+considered as a textual document describing one or more technical
+aspects of a software system, in which some of them might be
+erroneously implemented. The reports similarly describing the same
+erroneous technical aspects are considered as duplicate ones. We
+utilize Relational Topic Model (RTM), a probabilistic, generative
+topic model, to formulate the probabilistic structures of technical
+aspects in a collection of bug reports and the duplication indicators
+among them. Trained with historical data including identified
+duplicate reports, the model can be used to detect other
+not-yet-identified duplicate ones. To support software evolution, we
+extend RTM into incremental RTM (iRTM) in which the trained model can
+be quickly updated without wasting a large amount of time for
+completely re-training when new reports are filed or additional
+duplication information is available. Our empirical evaluation on
+several large, real-world systems shows that iRTM outperforms the
+state-of-the-art approach, achieving up to 90% top-10 accuracy with up
+to 8 times faster in updating its internal model as new bug reports
+arrive.
