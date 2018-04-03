@@ -14,40 +14,62 @@
 %the corresponding running phenomenon/additonal information
 %(environment, input data, running trace,...).
 
-In software development and maintenance, bug fixing is vital in
-producing high-quality software products. Bug fixing happens in both
-development and post-release time. In either case, the developers,
-testers, or end-users run a system and detect its incorrect
-behavior(s) that do not follow the system's requirements or their
-expectations. Then, they report such occurrences in a bug report that
-are often recorded in a bug-tracking database. Based on the
-information in a bug report, developers will analyze the phenomenon,
-locate the buggy code (debugging), and correct it to produce the
-correct behaviors (bug fixing).
+In software development and maintenance, fixing software defects
+(often called bugs) is crucial in software development to produce
+high-quality products. Bug fixing could occur during development or
+in post-release time. Developers, testers, or users of a software
+system encounter the detects and note its incorrect behaviors that do
+not follow the requirements or their expectations. They could report
+such defects in a bug repository that often called bug-tracking
+database.  The process of bug fixing continues with the developers
+analyzing the phenomenon, locating the defective code, correcting
+them, and committing the fixed code to the projects' repository.
+
+%In software development and maintenance, bug fixing is vital in
+%producing high-quality software products. Bug fixing happens in both
+%development and post-release time. In either case, the developers,
+%testers, or end-users run a system and detect its incorrect
+%behavior(s) that do not follow the system's requirements or their
+%expectations. Then, they report such occurrences in a bug report that
+%are often recorded in a bug-tracking database. Based on the
+%information in a bug report, developers will analyze the phenomenon,
+%locate the buggy code (debugging), and correct it to produce the
+%correct behaviors (bug fixing).
 
 %Based on such bug reports, respondence developers will do bug fixing:
 %analyzing the bug report the phenomenon, locating and understanding
 %the code causing the incorrect behaviors (debugging) and correcting
 %such code to produce correct behaviors (fixing).
 
-Generally, there are several users interacting with the same system
-and reporting its bugs. Therefore, a bug is occasionally reported by
-more than one reporters, resulting in duplicate bug reports. Detecting
-whether a new bug report is a duplicate one is crucial because it
-helps reduce the maintenance efforts from developers (e.g. if the bug
-is already fixed) as well as provides additional information in the
-bug fixing process (e.g. if the bug is not yet fixed). However, it is
-not straightforward to automatically detect duplicate bug
-reports. With different input data, usage environments or scenarios,
-an erroneous behavior might expose as different phenomena
-(e.g. different outputs, traces, or screen views). Moreover, different
+Users could interact with a software system in many different ways,
+thus, occasionally, a bug could be filed by multiple reporters. That
+leads to the duplicate bug reports for the same bugs.
+%
+%
+%Generally, there are several users interacting with the same system
+%and reporting its bugs. Therefore, a bug is occasionally reported by
+%more than one reporters, resulting in duplicate bug reports. 
+Because bug reports keep being filed everyday with high pace (e.g., in
+Eclipse, 3-5 new bug reports are often filed every hour), it is~vital
+to detect if a new bug report is a duplicate one. This
+%Detecting whether a new bug report is a duplicate one is crucial
+%because it helps 
+helps reduce the maintenance efforts from developers
+(e.g., if the bug is already fixed) and provides additional
+information in the bug fixing process (e.g., if the bug is not yet
+fixed). 
+%
+However, such automated detection of duplicate bug reports is not
+trivial.
+%
+%However, it is not straightforward to automatically detect duplicate
+%bug reports. 
+With different input data, usage environments or scenarios, an
+erroneous behavior might expose as different phenomena (e.g.,
+different outputs, traces, or screen views). Moreover, different
 reporters might use different terminologies and styles, or report on
-different elements to describe the same phenomena.
-% (for example, some includes running
-% traces, some provides screen captures).
-%Therefore, not many bug reports are similarly in text.
-Therefore, several duplicate bug reports are not very textually
-similar.
+different elements to describe the same phenomena. As a result,
+duplicate bug reports could be textually dissimilar.
 
 %[Tung: we should show this in the motivating examples]
 
@@ -72,23 +94,22 @@ not-yet-identified duplicate ones.
 
 %infer the hidden topics of each bug report in the given collection and the duplication indicators between any pair of bug reports in the collection. 
 
-In reality with software evolution, new reports are continually filed
-and new duplicate information could also be provided. The trained
-model should be updated with that new information. Therefore, we
-extend RTM into {\em incremental} RTM (iRTM) in which the trained
-model can be updated using a combination of a portion of existing data
-(historical reports and duplication indicators) and newly provided
-data (i.e. all new reports and additional duplication
-indicators). This helps save time on complete re-training on all old
-and new data, which could be very costly as the number of bug reports
-increases with a relatively high pace (for example, in Eclipse, 3-5
-new bug reports are often filed every hour).
-
+With software evolution, new reports are continually filed and new
+duplicate information could also be provided. The trained model should
+be updated with that new information. Therefore, we extend RTM into
+{\em incremental} RTM (iRTM) in which the trained model can be updated
+using a combination of a portion of existing data (historical reports
+and duplication indicators) and newly provided data (i.e., all new
+reports and additional duplication indicators). This helps save time
+on complete re-training on all old and new data, which could be very
+costly as the number of bug reports increases with a relatively high
+pace.
+%
 % while achieves the comparable detection accuracy.
 %This strategy saves a large amount of time for completely re-training
 %on input data that includes such new reports and duplication
 %indicators.
-
+%
 Our empirical evaluation on several large, real-world systems shows
 that {\model} outperforms the state-of-the-art approach from Sun {\em
 et al.}~\cite{davidlo10} in terms of both accuracy and time
