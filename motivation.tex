@@ -53,29 +53,29 @@ following observations:
 
 \begin{enumerate}
 
-\item This bug report is about two technical functions in Eclipse:
+\item This report is about two technical functions in Eclipse:
   \emph{memory browser} (MEM) and \emph{view management} (VM) of
   software artifacts. In general, MEM involves the operations such as
   \emph{create}, \emph{render}, and \emph{populate}. VM involves the
-  operations such as {\em refresh}, {\em resize}, {\em rendering}, etc.
+  operations such as {\em refresh}, {\em resize}, {\em rendering},~etc.
 
-\item The bug occurred in the code implementing MAN. That is, the operation
-\emph{open} on a resource file in the repository was incorrectly
-implemented.
+\item The bug occurred in the code implementing memory browsing. That
+  is, the operation {\em rendering}  on an initial view
+   was incorrectly implemented.
 %Technically, the system maintains no mappings between resource types
 %and editors, thus, it uses the default text editor to open all kinds
 %of resource.
 
-\item In the bug report BR2, the technical function MAN can be recognized
-in its contents via the words that are relevant to MAN such as
-\code{editor}, \code{open}, \code{view}, \code{content},
-\code{resource}, \code{file}, \code{text}, and \code{image}.
-Similarly, the description also contains relevant terms to VCM such as
-\code{repository}, \code{resource}, and \code{file}. Note that, some
-words such as \code{resource} and \code{file} are used to describe
-both functions MAN and VCM. If considering bug reports as textual
-documents, we can view the described technical functions as the
-\textbf{topics} of those documents.
+\item In this bug report, the technical function MEM can be recognized
+  in its contents via the words that are relevant to memory browsing
+  such as \code{rendering}, \code{view}, \code{create}, \code{populate},
+  \code{floating}, and \code{memory}.
+  Similarly, the description also contains relevant terms to VM such
+  as \code{refresh}, \code{resize}, and \code{rendering}. Note that,
+  some words such as \code{rendering} and \code{view} are used to
+  describe both functions MEM and VM. If considering bug reports as
+  textual documents, we can view the described technical functions as
+  the \textbf{topics} of those documents.
 
 \end{enumerate}
 
@@ -130,52 +130,68 @@ If the view is resized, it gets populated correctly. This works correctly in GTK
 \label{fig:br2}
 \end{figure}
 
-\vspace{0.04in}\noindent\textbf{Observations on a duplicate bug
-report} Figure~\ref{fig:br2} presents bug report ID 9779, filed on
-02/13/2002 by a different reporter, Jeff Brown. This report was
-determined by Eclipse's developers as reporting the same bug as in
-BR2. Analyzing the contents of BR9779 and comparing to those of BR2,
-we can see that
+\noindent\textbf{Observations on a duplicate bug report}
+Figure~\ref{fig:br2} presents bug report ID 493035, filed on
+05/04/2016 by a different reporter, Marc-Andre Laperle. This report
+was determined by Eclipse's developers as reporting the same bug as in
+bug report 488105. Analyzing the contents of 493035 and comparing to
+those of 488105, we can see that
 
 %have the following observations:
 
 \begin{enumerate}
 
 
-\item BR9779 also describes two aspects/functions: MAN - manipulating and
-VCM - versioning of software artifacts. MAN was also reported to be
-buggy.
+\item BR 493035 also describes two aspects/functions: MEM - memory
+  browsing and VM - view management. MEM was also reported to contain
+  bug(s).
 
-\item The terms that are used to describe MAN are similar to those in BR2,
-e.g. \code{open}, \code{file}, and \code{editor}. However, the terms
-describing VCM are somewhat different, such as \code{remote},
-\code{revision}, or \code{history}.
+\item The terms that are used to describe MEM are similar to those in
+  BR 488105, e.g., \code{memory}, \code{browser}, and
+  \code{initially}. The terms describing VM are somewhat similar
+  such as \code{view}, \code{resize}, and \code{populate}.
 
-\item BR9779 provides additional information about the bug. It notifies
-that \code{OpenRemoteFileAction}, the class responsible for opening
-a remote file, is directly associated with
-\code{org.eclipse.ui.DefaultTextEditor}, i.e., it always uses the
-default editor to open a remote file. The report also provides a
-fixing suggestion: asking Workbench's \code{IEditorRegistry} for the
-default editor given the filename.
+\item BR 493035 provides additional information about the bug such as
+  the OS and the feature under which the bug occurred (Ubuntu, Fedora,
+  Memory View Enhancements, address field). It also provides the steps
+  to reproduce the bug. The text contains those additional terms. It
+  mentioned the cases that the system worked correctly such as after
+  being resized, getting populated, or in GTK2.
+
+%It notifies that \code{OpenRemoteFileAction}, the class responsible
+%for opening a remote file, is directly associated with
+%\code{org.eclipse.ui.DefaultTextEditor}, i.e., it always uses the
+%default editor to open a remote file. The report also provides a
+%fixing suggestion: asking Workbench's \code{IEditorRegistry} for the
+%default editor given the filename.
+
 %Based on those two examples and five observations, we imply/conclude
 %that:
 %1. Duplicate bug reports do exist in real-world software development (the bug discussed here is also duplicately reported in BR000094 and BR015392). This is because the software system tend to be used by many independent people in many different environment and usage settings. Thus, an existing bug is easily seen/experienced and reported by several people.
 
 \end{enumerate}
 
-\vspace{0.03in}\noindent\textbf{Implications} The detection of such
-duplicate bug reports has several benefits in software development and
-maintenance. First, the duplicate bug reports, reported by people with
-different points of view and experience could provide different kinds
-of information about the bug(s), thus, help in the debugging and
-fixing process. Importantly, detecting duplicate bug reports would
-help developers to avoid redundant bug fixing efforts.
+\vspace{0.03in}\noindent\textbf{Implications} Several researchers have
+reported the benefits of the detection of duplicate bug
+reports. First, the duplicate bug reports provide various different
+view points and usage experience in different scenarios. Those give
+different angles of the same bug(s), helping developers in the project
+to debug and fix the defect(s) more quickly. Second, knowing the new
+report is a duplication and was already fixed in a previous one helps
+reduce the cost of redundant fixing efforts.
+
+%The detection of such duplicate bug reports has several benefits in
+%software development and maintenance. First, the duplicate bug
+%reports, reported by people with different points of view and
+%experience could provide different kinds of information about the
+%bug(s), thus, help in the debugging and fixing process. Importantly,
+%detecting duplicate bug reports would help developers to avoid
+%redundant bug fixing efforts.
 
 However, manual detection of duplicate bug reports is highly
 time-consuming. For a large-scale project, the number of bugs and the
 bug reporting rate are fairly high. For example, in Eclipse, there are
-currently more than 363K bug reports and there are from 2-5 newly
+currently more than 533K bug reports and there are from 2-5 newly
 filed bug reports every hour. To detect whether a new bug report is a
 duplication of some existing bug report, one would need to analyze and
 compare it with all those bug reports, both new and existing
@@ -187,13 +203,13 @@ reports is highly desirable.
 The above example shows us that the detection of duplicate bug reports
 could be based on their technical topics, rather than the concrete
 terms/words that are used. Intuitively, topics are \emph{latent}, {\em
-semantic} features, while terms are \emph{visible, textual} features
+  semantic} features, while terms are \emph{visible, textual} features
 of the documents. One could expect that the former would describe the
 similarity of the documents more accurate than the latter. For
-example, BR2 and BR9779 describe the same topic, but they might use
-\emph{different} terms for the same topic. In BR9779, the words
-\code{remote}, \code{revision}, and \code{history} are used to
-describe VCM, while they do not appear in BR2.
+example, BR 488105 and BR 493035 describe the same topic, but they
+might use \emph{different} terms for the same topic. In BR 493035, the
+words \code{blank}, {\em debugging}, {\em view enhancements}, are used
+to describe VM, while they do not appear in BR 488105.
 
 %Thus, term-based assessment of those two documents might be less
 %accurate/effective than topic-based assessment.
