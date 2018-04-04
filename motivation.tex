@@ -1,50 +1,63 @@
+%\begin{figure}[t]
+%\sf
+%\small
+%\textbf{ID}:000002; \textbf{CreationDate}:Wed Oct 10 20:34:00 CDT 2001; \textbf{Reporter}:Andre Weinand
+
+%\textbf{Summary}: Opening repository resources doesn't honor type.
+
+%\textbf{Description}:Opening repository resource always open the default text editor and doesn't honor any mapping between resource types and editors. As a result it is not possible to view the contents of an image (*.gif file) in a sensible way.
+%\rm
+%\caption{Bug report BR2 in Eclipse project}
+%\label{fig:br1}
+%\end{figure}
+
+
 \begin{figure}[t]
 \sf
 \small
-\textbf{ID}:000002; \textbf{CreationDate}:Wed Oct 10 20:34:00 CDT 2001; \textbf{Reporter}:Andre Weinand
+\textbf{ID}:488105; \textbf{Reported:}:2016-02-19 08:46 EST; \\\textbf{Reporter}:Marc Dumais
 
-\textbf{Summary}: Opening repository resources doesn't honor type.
+\textbf{Summary}:  [memory] Traditional and Floating Point Renderings: view is initially empty
 
-\textbf{Description}:Opening repository resource always open the default text editor and doesn't honor any mapping between resource types and editors. As a result it is not possible to view the contents of an image (*.gif file) in a sensible way.
+\textbf{Description}: This happens in both the Memory and Memory Browser views, for Traditional and Floating Point renderings. 
+
+When a new Memory Browser view is created, or when a new rendering is created in the Memory view using one of these renderings, the view is initially not populated. It then becomes populated when a refresh occurs, for example by re-sizing the view. See attached screenshot for an example.
 \rm
-\caption{Bug report BR2 in Eclipse project}
+\caption{Bug report 488105~\cite{bug488105} in Eclipse project}
 \label{fig:br1}
 \end{figure}
-
 
 
 \section{Motivating Example}
 \label{sec:example}
 
-Let us begin with an example of duplicate bug reports that
-motivate our approach. Generally, a bug report is a record in a
-bug-tracking database, containing several descriptive fields about the
-bug(s). Important fields in a bug report include 1) a unique
-identification number of the report (\textbf{\sf ID}), creation
-time (\textbf{\sf CreationDate}), the reporting person (\textbf{\sf
-Reporter}), and most importantly, a short summary (\textbf{\sf
-Summary}) and a full description (\textbf{\sf Description}) of the
-bug(s).
+Let us explain an example of duplicate bug reports that motivate our
+approach. Generally, a bug report is a record in a bug-tracking
+repository of a project, containing the descriptions on the
+bug(s). Typically, a bug record contains the following important
+fields 1) a unique ID of the report (\textbf{\sf ID}), reported date
+(\textbf{\sf ReportedDate}), the reporter (\textbf{\sf Reporter}), and
+a short summary (\textbf{\sf Summary}) and a full description
+(\textbf{\sf Description}).
 
 \vspace{0.05in}\noindent\textbf{Observations on a bug report}
 Figure~\ref{fig:br1} displays an example of an already-fixed bug
 report in Eclipse project. As shown, this bug report was assigned the
-ID of 2 and reported on 10/10/2001 by Andre Weinand for a bug on
-Eclipse v2.0. It described that the system always used the default
-text editor to open and display any resource file (e.g. a GIF image)
-stored in the repository despite its type. Analyzing the textual
-description, we have the following observations:
+ID of 488105 and reported on 02/19/2016 by Marc Dumais for a bug on
+Eclipse. It described that the initial view or initial rendering for
+memory browser is not populated. When it becomes populated when a
+refresh occurs. Analyzing the textual description, we have the
+following observations:
 
 %functions/technical aspects/concerns/featues 
 
 \begin{enumerate}
 
 \item This bug report is about two technical functions in Eclipse:
-\emph{manipulating} (MAN) and \emph{versioning} (VCM) of software
-artifacts. In general, MAN involves the operations such as \emph{open},
-\emph{view}, \emph{edit}, and \emph{save} on files/resources. VCM
-involves the operations such as \emph{connect}, \emph{commit},
-\emph{update}, etc.
+  \emph{memory browser} (MEM) and \emph{view management} (VM) of
+  software artifacts. In general, MEM involves the operations such as
+  \emph{create}, \emph{render}, and \emph{populate}. VM involves the
+  operations such as {\em refresh}, {\em resize}, {\em rendering}, etc.
 
 \item The bug occurred in the code implementing MAN. That is, the operation
 \emph{open} on a resource file in the repository was incorrectly
@@ -66,29 +79,54 @@ documents, we can view the described technical functions as the
 
 \end{enumerate}
 
+%\begin{figure}
+%\sf
+%\small
+%\textbf{ID}:009779; \textbf{CreationDate}:Wed Feb 13 15:14:00 CST 2002; \textbf{Reporter}:Jeff Brown
+
+%\textbf{Resolution}:DUPLICATE
+
+%\textbf{Summary}: Opening a remote revision of a file should not always use the default text editor.
+
+%\textbf{Description}: \code{OpenRemoteFileAction} hardwires the editor
+%that is used to open remote file to
+%\code{org.eclipse.ui.DefaultTextEditor} instead of trying to find an
+%appropriate one given the file's type.
+
+%You get the default text editor regardless of whether there are
+%registered editors for files of that type -- even if it's binary. I
+%think it would make browsing the repository or resource history
+%somewhat nicer if the same mechanism was used here as when files are
+%opened from the navigator. We can ask the Workbench's
+%\code{IEditorRegistry} for the default editor given the
+%filename. Use text only as a last resort (or perhaps because of a
+%user preference).  \rm
+%\caption{Bug report BR9779, a duplication of bug report BR2 in Eclipse}
+%\label{fig:br2}
+%\end{figure}
+
 \begin{figure}
 \sf
 \small
-\textbf{ID}:009779; \textbf{CreationDate}:Wed Feb 13 15:14:00 CST 2002; \textbf{Reporter}:Jeff Brown
+\textbf{ID}:Bug 493035; \textbf{Reported}: 2016-05-04 18:12 EDT; \textbf{Reporter}:Marc-Andre Laperle
 
 \textbf{Resolution}:DUPLICATE
 
-\textbf{Summary}: Opening a remote revision of a file should not always use the default text editor.
+\textbf{Summary}: [GTK3] CDT Memory Browser initially blank
 
-\textbf{Description}: \code{OpenRemoteFileAction} hardwires the editor
-that is used to open remote file to
-\code{org.eclipse.ui.DefaultTextEditor} instead of trying to find an
-appropriate one given the file's type.
+\textbf{Description}: 
+Using I20160504-0035
+CDT master as of today
+Ubuntu 16.04 and Fedora 23 (GTK 3.18.9)
+C/C++ Memory View Enhancements feature installed
 
-You get the default text editor regardless of whether there are
-registered editors for files of that type -- even if it's binary. I
-think it would make browsing the repository or resource history
-somewhat nicer if the same mechanism was used here as when files are
-opened from the navigator. We can ask the Workbench's
-\code{IEditorRegistry} for the default editor given the
-filename. Use text only as a last resort (or perhaps because of a
-user preference).  \rm
-\caption{Bug report BR9779, a duplication of bug report BR2 in Eclipse}
+1. Create a hello world C++ project
+2. Start debugging
+3. Open the memory browser
+4. Enter main in the address field. The memory view is blank.
+
+If the view is resized, it gets populated correctly. This works correctly in GTK2.
+\caption{Bug report 493035~\cite{bug493035}, a duplication of bug report 488105 in Eclipse}
 \label{fig:br2}
 \end{figure}
 
