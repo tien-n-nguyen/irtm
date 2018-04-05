@@ -71,8 +71,8 @@ modeled as to be {\em generated} by {\model} model;
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=4.2in]{irtm3}
-\caption{Topic Modeling~\cite{lda}}
+\includegraphics[width=4.2in]{irtm4}
+\caption{Topic Modeling for Bug Reports~\cite{lda}}
 \label{topicmodel}
 \end{figure}
 
@@ -81,8 +81,13 @@ modeled as to be {\em generated} by {\model} model;
 
 \subsection{Relational Topic Modeling}
 
-For topic modeling in bug reports, we use LDA~\cite{lda} and adapt
-RTM~\cite{RTM}. Figure~\ref{topicmodel} shows the details.  The global
+
+%For topic modeling in bug reports, we use LDA~\cite{lda} and adapt
+%RTM~\cite{RTM}. 
+
+We formulate the problem of duplicate bug report detection by adapting
+and extending RTM~\cite{RTM} to support software
+evolution. Figure~\ref{topicmodel} shows the details.  The global
 parameters include a vocabulary containing $V$ words available to be
 used in the bug reports and a set of $K$ topics. The topic indexed by
 $t$ ($t=1..K$) is modeled by a vector $\phi_t$ of size $V$, in which
