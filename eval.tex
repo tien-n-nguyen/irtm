@@ -33,7 +33,7 @@ X4 965 3.0 GHz, 8GB RAM, and Windows~10.
 \begin{table}[t]
 \addtolength{\tabcolsep}{-3pt}
 \centering
-\scriptsize
+\small
 \caption{Statistics of All Bug Report Data}
     \begin{tabular}{lcccccc}
     \hline
@@ -51,22 +51,27 @@ X4 965 3.0 GHz, 8GB RAM, and Windows~10.
 \label{data}
 \end{table}
 
-We used the same data sets of bug reports in the open-source projects
-as in REP~\cite{sun-ase11} (Table~\ref{data}). Column \code{Time
-  period} displays the time period of collected bug reports. Columns
-\code{Report} and \code{Dup} show the numbers of bug reports and
-duplicate ones, respectively. Columns \code{Train} and \code{Test}
-show the number of the duplicate bug reports used for training and
-testing, respectively.  Each bug report has its unique ID, a summary,
-a description, comments, and other metadata (e.g. severity, priority,
-its reporter, creation date, etc). All projects are developed in a
-long history.  The duplication information among bug reports is also
-available in that data set. The information on the duplications is
-available in the collected bug reports. Each duplicate report is
-marked and links to its duplicate group. The data is used to train
-{\model} and ensemble weights, and then used to evaluate {\model}'s
-accuracy in detecting the duplication between a bug report and the
-duplicate bug report groups.
+For the comparison purpose, we chose the same data sets of bug reports
+used in the existing work~\cite{davidlo10} (Table~\ref{data}).
+%We used the same data sets of bug reports in the open-source projects
+%as in REP~\cite{sun-ase11} (Table~\ref{data}). 
+Column \code{Time period} displays the time period of collected bug
+reports. Columns \code{Report} and \code{Dup} show the numbers of bug
+reports and duplicate ones, respectively. Columns \code{Train} and
+\code{Test} show the number of the duplicate bug reports used for
+training and testing, respectively. Each bug report has its unique
+ID, a summary, a description, comments, and other metadata
+(e.g., severity, priority, its reporter, creation date, etc). All
+projects are developed in a long history.  
+%
+%The duplication information among bug reports is also available in
+%that data set.
+The information on the duplications is available in the 
+collected bug reports. 
+Each duplicate report is marked and links to its duplicate group. The
+data is used to train {\model} and ensemble weights, and then used to
+evaluate {\model}'s accuracy in detecting the duplication between a
+bug report and the duplicate bug report~groups.
 %-------------------------------------------------
 
 %We conducted an empirical evaluation of {\model} on several
@@ -88,12 +93,12 @@ duplicate bug report groups.
 The summary and description of a bug report were merged and considered
 as a document. It then went through pre-processing such as stemming,
 and removing grammatical and stopwords, and single-occurrence words
-as in REP~\cite{sun-ase11}.
+as in~\cite{davidlo10}.
 In our experiment, for {\model}, we extracted and merged the summary
 and description of each report, and used the merged contents as the
 document for the report. Each document was then preprocessed such as
 stemming for term normalization, and removing grammatical words
-(e.g. ``a'', ``the'', ``and'', etc) and those terms appearing once in
+(e.g., ``a'', ``the'', ``and'', etc.) and those terms appearing once in
 the entire corpus as in~\cite{RTM}. Tf-Idf was run to determine and
 remove the common words that appear in most of the bug reports.
 Then, all the words were collected and indexed into a vocabulary.
@@ -140,14 +145,14 @@ For the purpose of comparing the performance of {\model} with that of
 other work, we use the same evaluation metrics and setup as in the
 previous research of Sun {\em et al.}~\cite{davidlo10} for duplicate
 bug report detection. 
-
+%
 %Tien
-The evaluation setting is the same as in REP~\cite{sun-ase11}.  All
-bug reports were sorted in the chronological order. We divided the
-data set into two sets.  The training set includes the first $M$
-reports in the repository, of which 200 reports are duplicates.  It
-was used to train the parameters for {\model}, BM25F, and
-{\model}. The remaining reports were used for testing. At each
+%The evaluation setting is the same as in REP~\cite{sun-ase11}.  
+Specifically, all bug reports were sorted in the chronological
+order. We divided the data set into two sets.  The training set
+includes the first $M$ reports in the repository, of which 200 reports
+are duplicates.  It was used to train the parameters for the
+models. The remaining reports were used for testing. At each
 execution, we ran {\model} through the testing reports in the
 chronological order. When it determines a duplicate report $b$, it
 returns the list of top-$k$ potential duplicate report groups. If a
@@ -197,8 +202,8 @@ model in Sun {\em et al.}'s.
 
 
 We chose the top-ranked accuracy as a performance metric, rather than
-precision (i.e. ratio between the number of correctly detected ones
-over the total number of detected ones) and recall (i.e. the ratio
+precision (i.e., the ratio between the number of correctly detected ones
+over the total number of detected ones) and recall (i.e., the ratio
 between the number of correctly detected ones over the total number of
 duplicate ones). The reason is that using detection accuracy fits
 better in evaluating this detection tool: given a new bug report, a
@@ -347,22 +352,23 @@ problem degrades the accuracy.
 \end{table}
 
 In our next experiment, we evaluated the sensitivity of accuracy as
-the size $r$ of (Gibbs) sampling set varies for incremental updating of
-{\model}'s internal data (Section IV.B.3.). We fixed the number of
-topics $K$ at 500 because we used Eclipse data set for this
-experiment. We varied the size of the sample set from 0, 1, 5, 10,
-20, ..., 90, and 100\% of the full size of existing data. The case of
-100\% means complete re-training. We measured accuracy and the
+the size $r$ of (Gibbs) sampling set varies for incremental updating
+of {\model}'s internal data (Section~\ref{updating-algo}). We fixed
+the number of topics $K$ at 500 because we used Eclipse data set for
+this experiment. We varied the size of the sample set from 0, 1, 5,
+10, 20, ..., 90, and 100\% of the full size of existing data. The case
+of 100\% means complete re-training. We measured accuracy and the
 updating time for each case. As seen in Table~\ref{tradeoff}, when the
 sample size of bug reports used for updating the internal model is
 small, time efficiency is gained very much with very little accuracy
 reduced. For example, with the selection of 10\% of previous bug
 reports for model updating, the updating time is 8.2 times smaller but
 top-ranked accuracy reduces only from 2-3\%. This result shows that
-our selection strategy for a smaller sample set (Section IV.B.3.) for
-incremental updating is efficient and quite accurate. If a small
-sample of previous bug reports is selected such that all duplicate
-ones are included, accuracy will not reduce much.
+our selection strategy for a smaller sample set
+(Section~\ref{updating-algo}) for incremental updating is efficient
+and quite accurate. If a small sample of previous bug reports is
+selected such that all duplicate ones are included, accuracy will not
+reduce much.
 
 
 \subsection{Accuracy Comparison}
@@ -380,18 +386,18 @@ of Sun {\em et al.}'s~\cite{davidlo10}. The parameters of {\model} in
 this experiment were selected after fine-tuning for best results as
 described earlier. Figure~\ref{eclipse} displays the accuracy result
 of {\model} in comparison with Sun {\em et al.}'s on Eclipse data
-set. As shown, for a new bug report, in half of the detection cases,
+set. As shown, for a new bug report, {\bf in half of the detection cases,
 {\model} can correctly detect the duplication (if any) with just a
-single result. With a list of top 5 resulting bug reports, {\model}
+single result}. With a list of top 5 resulting bug reports, {\model}
 can correctly detect the duplication of a given report in 71\% of the
 cases. That is, given a bug report, it can correctly detect its
 duplication(s) (if any) within its top-5 recommended bug reports in
-71\% of the cases. With top lists of 10 reports, it can correctly
+almost 3 out of 4 cases. With top lists of 10 reports, it can correctly
 detect in 80\% of the cases. In comparison, Sun {\em et al.}'s tool
 can achieve the accuracy levels at the top lists of sizes 5 and 10 at
 only 53\% and 58\%, respectively. In general, for top lists from 1-10
-bug reports, {\model} achieves higher accuracy than Sun {\em et al.}'s
-from 12\%-22\%.
+bug reports, {\bf {\model} achieves higher accuracy than Sun {\em et al.}'s
+from 12--22\%}.
 
 \begin{figure}[t]
 \centering
@@ -408,16 +414,17 @@ from 12\%-22\%.
 
 Figures~\ref{openoffice}, \ref{firefox}, \ref{apache},
 \ref{freedesktop}, and \ref{netbeans} display the accuracy results of
-{\model} in comparison with Sun {\em et al.}'s approach on OpenOffice,
-FireFox, Apache, FreeDesktop, and NetBeans datasets,
-respectively. {\model} consistently achieves very high levels of
-accuracy (with up to 63\% for top-1, 87\% for top-5, and 90\% for
-top-10 accuracy). On average for each subject system, the top-1,
-top-5, and top-10 accuracy levels are 56\%, 78\%, and 85\%,
-respectively. For the top-1 to top-10 results, {\model} consistently
-outperformed Sun {\em et al.}'s with higher accuracy from 11\%-20\% on
-OpenOffice, 4\%-9\% on FireFox, 6\%-11\% on Apache, 18\%-25\% on
-FreeDesktop, and 6\%-11\% on NetBeans datasets.
+    {\model} in comparison with Sun {\em et al.}'s approach on
+    OpenOffice, FireFox, Apache, FreeDesktop, and NetBeans datasets,
+    respectively. {\bf {\model} consistently achieves very high levels
+      of accuracy (with up to 63\% for top-1, 87\% for top-5, and 90\%
+      for top-10 accuracy)}. On average for each subject system, the
+    top-1, top-5, and top-10 accuracy levels are 56\%, 78\%, and 85\%,
+    respectively. For the top-1 to top-10 results, {\bf {\model}
+      consistently outperformed Sun {\em et al.}'s with higher
+      accuracy from 6--25\%} (from 11--20\% on OpenOffice, 4--9\% on
+      FireFox, 6--11\% on Apache, 18--25\% on FreeDesktop, and
+      6--11\% on NetBeans datasets).
 
 
 %%Figure~\ref{openoffice} displays the accuracy result of {\model} in
@@ -558,8 +565,8 @@ its complete re-training time will be.
 
 In our third experiment, we evaluated the scalability of {\model}
 for a large data set. In this experiment, we prepared a larger dataset
-of Eclipse's bug reports with a longer history. We chose Eclipse' s
-platform component from October 2000 to July 2010 with 61,110 bug
+of Eclipse's bug reports with a longer history. We chose Eclipse's
+platform component  with 61,110 bug
 reports, in which 14,020 are determined by Eclipse's developers as
 duplicate ones.  The sizes of vocabulary sets is 120,372 terms. 
 %(In the previous experiment for comparing {\model} with Sun {\em et

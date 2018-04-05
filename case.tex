@@ -61,8 +61,8 @@
 %-------------------------------------------------------------------------
 
 \begin{figure}[t]
-\scriptsize
-\sf
+%\scriptsize
+%\sf
 \small
 \textbf{Bug Report \#240790}\\
 \textbf{Summary}: [search] callers are not found when caller and callee reside in sibling Java projects\\
@@ -76,8 +76,7 @@
 \textbf{Description}:\\
 	1) define 3 projects: rootProject, subProject1, and subProject2.\\
 	2) set project build depedencies such that subProject1 and subProject2 depend
-	on rootProject\\
-	...\\
+	on rootProject...\\
 	6) Search for references to Square.f() directly from it's declaration in
 	Square.java.\\
 			6a) EXPECT: one result: ShapeUser.useShape(Shape)\\
@@ -91,8 +90,7 @@
 
 	Additionally, searching for references to f() from the Shape declaration
 	succeeds as defined above.  It appears the search does not go to all dependent
-	projects of the project declaring the interface.\\
-	...\\
+	projects of the project declaring the interface....\\
 \caption{Duplicate Bug Reports \#250454 and \#240790}
 \label{bugreport250454}
 \end{figure}
@@ -101,7 +99,7 @@
 \noindent {\bf Interesting Case Studies} An example of detected duplicate bug reports 
 is in Figure~\ref{bugreport250454}. The texts in two summaries are
 different. The re-producing steps described by two bug reporters are
-totally different. As running with the BM25F model alone, bug
+totally different. As running with the Sun {\em et al.}'s model alone, bug
 report \#240790 was ranked 6th in the list of potential duplications
 of bug report \#250454. Trained with historical data via identified
 duplicate reports of \#250454 (not shown), DBTM can learn sets of

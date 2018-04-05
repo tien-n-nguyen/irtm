@@ -54,6 +54,19 @@ the generative approach, {\model} does not have to deal with negative
 and positive sample sets. Instead, it decides the probability of
 generating a pair of duplicate bug reports.
 
+To overcome that, Sun {\em et al.}~\cite{sun-ase11} introduced REP, a
+novel IR technique that extends BM25F to consider the long bug reports
+and the meta-data such as the reported product, component, and
+version. They showed that REP outperformed the state-of-the-art ML
+approaches in both accuracy and efficiency. We did not compare with REP
+because it is IR-based while we used machine learning.
+%XW
+%In this work, we combine BM25F with our novel topic model, T-Model, to
+%address the cases where duplicate reports have different terms for the
+%same technical issue. To our knowledge, DBTM is the first work in
+%which topic-based features are used with IR to support the detection
+%of duplicate bug reports.
+%
 Jalbert and Weimer~\cite{weimer08} use a binary classifier model for
 predicting duplicate bug reports. They utilizes a linear regression
 over {\em textual} features of bug reports computed from the
