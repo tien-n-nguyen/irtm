@@ -9,7 +9,8 @@
 Developers, testers, or users of a software system encounter the
 detects and note its incorrect behaviors that do not follow the
 requirements or their expectations. They could report such defects in
-a bug repository that often called bug-tracking database.
+a bug repository.
+%that often called bug-tracking database.
 %
 %The process of bug fixing continues with the developers analyzing the
 %phenomenon, locating the defective code, correcting them, and
@@ -37,19 +38,19 @@ duplicate bug reports could be textually dissimilar.
 
 %[Tung: we should show this in the motivating examples]
 
-To automate the detection process of duplicate bug reports, we propose
-a probabilistic approach. In our approach, each bug report is
-considered as a textual document describing one or more technical
-aspects/functionality of a system, in which some of them might be
-erroneously implemented. The reports similarly describing the same
-erroneous technical aspects are considered as duplicate
-ones. Considering the technical aspects as the topics of those
-text-based bug reports, we utilize Relational Topic Model
-(RTM)~\cite{RTM}, a probabilistic, generative model, to formulate
-their topic structures and duplication indicators. We use Gibbs
-sampling~\cite{gibb} to train the model on historical data with
-identified duplicate bug reports and then detect other
-not-yet-identified duplicate ones.
+%To automate the detection process of duplicate bug reports, we propose
+%a probabilistic approach. In our approach, each bug report is
+%considered as a textual document describing one or more technical
+%aspects/functionality of a system, in which some of them might be
+%erroneously implemented. The reports similarly describing the same
+%erroneous technical aspects are considered as duplicate
+%ones. Considering the technical aspects as the topics of those
+%text-based bug reports, we utilize Relational Topic Model
+%(RTM)~\cite{RTM}, a probabilistic, generative model, to formulate
+%their topic structures and duplication indicators. We use Gibbs
+%sampling~\cite{gibb} to train the model on historical data with
+%identified duplicate bug reports and then detect other
+%not-yet-identified duplicate ones.
 
 % iRTM
 %With software evolution, new reports are continually filed and new
@@ -64,14 +65,15 @@ not-yet-identified duplicate ones.
 %pace.
 
 %
-Our empirical evaluation on several large, real-world systems shows
-that {\model} outperforms the state-of-the-art approach from Sun {\em
-et al.}~\cite{davidlo10} in terms of both accuracy and time
-efficiency. It can achieve up to 90\% top-10 accuracy, with updating
-time within 0.14 seconds per new bug report on average. The updating
-time for our model with new data is about 5-8 times smaller than the
-re-training time of the Sun {\em et al.}'s approach
-in~\cite{davidlo10}.
+
+%Our empirical evaluation on several large, real-world systems shows
+%that {\model} outperforms the state-of-the-art approach from Sun {\em
+%et al.}~\cite{davidlo10} in terms of both accuracy and time
+%efficiency. It can achieve up to 90\% top-10 accuracy, with updating
+%time within 0.14 seconds per new bug report on average. The updating
+%time for our model with new data is about 5-8 times smaller than the
+%re-training time of the Sun {\em et al.}'s approach
+%in~\cite{davidlo10}.
 
 %
 %The contributions of this paper include:

@@ -1,0 +1,152 @@
+\begin{figure}[t]
+\sf
+\small
+\textbf{ID}:488105; \textbf{Reported:}:2016-02-19 08:46 EST; \\\textbf{Reporter}:Marc Dumais
+
+\textbf{Summary}:  [memory] Traditional and Floating Point Renderings: view is initially empty
+
+\textbf{Description}: This happens in both the Memory and Memory Browser views, for Traditional and Floating Point renderings. 
+
+When a new Memory Browser view is created, or when a new rendering is created in the Memory view using one of these renderings, the view is initially not populated. It then becomes populated when a refresh occurs, for example by re-sizing the view. See attached screenshot for an example.
+\rm
+\caption{Bug report 488105~\cite{bug488105} in Eclipse project}
+\label{fig:br1}
+\end{figure}
+
+%\section{Motivating Example}
+%\label{sec:example}
+
+Let us explain an example of duplicate bug reports that motivate our
+approach.
+%Generally, a bug report is a record in a bug-tracking
+%repository of a project, containing the descriptions on the
+%bug(s).
+A bug record contains the following important fields 1) a unique ID
+of the report (\textbf{\sf ID}), reported date (\textbf{\sf
+  ReportedDate}), the reporter (\textbf{\sf Reporter}), and a short
+summary (\textbf{\sf Summary}) and a full description (\textbf{\sf
+  Description}).
+
+%\vspace{0.05in}\noindent\textbf{Observations on a bug report}
+Figure~\ref{fig:br1} displays an example of an already-fixed bug
+report in Eclipse project. As shown, this bug report was assigned the
+ID of 488105 and reported on 02/19/2016 by Marc Dumais for a bug on
+Eclipse. It described that the initial view or initial rendering for
+memory browser is not populated. When it becomes populated when a
+refresh occurs. Figure~\ref{fig:br2} presents bug report ID 493035,
+filed on 05/04/2016 by a different reporter, Marc-Andre Laperle. This
+report was determined as reporting the same bug as in bug report
+488105.
+
+%===
+%Analyzing the textual description, we have the following observations:
+
+%\begin{enumerate}
+
+%\item This report is about two technical functions in Eclipse:
+%  \emph{memory browser} (MEM) and \emph{view management} (VM) of
+%  software artifacts. In general, MEM involves the operations such as
+%  \emph{create}, \emph{render}, and \emph{populate}. VM involves the
+%  operations such as {\em refresh}, {\em resize}, {\em rendering},~etc.
+
+%\item The bug occurred in the code implementing memory browsing. That
+%  is, the operation {\em rendering}  on an initial view
+%   was incorrectly implemented.
+
+%\item In this bug report, the technical function MEM can be recognized
+%  in its contents via the words that are relevant to memory browsing
+%  such as \code{rendering}, \code{view}, \code{create}, \code{populate},
+%  \code{floating}, and \code{memory}.
+%  Similarly, the description also contains relevant terms to VM such
+%  as \code{refresh}, \code{resize}, and \code{rendering}. Note that,
+%  some words such as \code{rendering} and \code{view} are used to
+%  describe both functions MEM and VM. If considering bug reports as
+%  textual documents, we can view the described technical functions as
+%  the \textbf{topics} of those documents.
+
+%\end{enumerate}
+
+\begin{figure}
+\sf
+\small
+\textbf{ID}:Bug 493035; \textbf{Reported}: 2016-05-04 18:12 EDT; \textbf{Reporter}:Marc-Andre Laperle
+
+\textbf{Resolution}:DUPLICATE
+
+\textbf{Summary}: [GTK3] CDT Memory Browser initially blank
+
+\textbf{Description}: 
+Using I20160504-0035
+CDT master as of today
+Ubuntu 16.04 and Fedora 23 (GTK 3.18.9)
+C/C++ Memory View Enhancements feature installed
+
+1. Create a hello world C++ project
+2. Start debugging
+3. Open the memory browser
+4. Enter main in the address field. The memory view is blank.
+If the view is resized, it gets populated correctly. This works correctly in GTK2.
+\caption{Bug report 493035~\cite{bug493035}, a duplication of 488105}
+\label{fig:br2}
+\end{figure}
+
+%\noindent\textbf{Observations on a duplicate bug report}
+
+
+
+%Analyzing the contents of 493035 and comparing to those of 488105, we
+%can see that
+
+%\begin{enumerate}
+
+%\item BR 493035 also describes two aspects/functions: MEM - memory
+%  browsing and VM - view management. MEM was also reported to contain
+%  bug(s).
+
+%\item The terms that are used to describe MEM are similar to those in
+%  BR 488105, e.g., \code{memory}, \code{browser}, and
+%  \code{initially}. The terms describing VM are somewhat similar
+%  such as \code{view}, \code{resize}, and \code{populate}.
+
+%\item BR 493035 provides additional information about the bug such as
+%  the OS and the feature under which the bug occurred (Ubuntu, Fedora,
+%  Memory View Enhancements, address field). It also provides the steps
+%  to reproduce the bug. The text contains those additional terms. It
+%  mentioned the cases that the system worked correctly such as after
+%  being resized, getting populated, or in GTK2.
+
+%\end{enumerate}
+
+The example shows us that the detection of duplicate bug reports
+could be based on their technical topics, rather than the concrete
+words. Intuitively, topics are \emph{latent}, {\em
+  semantic} features, while terms are \emph{visible, textual} features
+of the documents. One could expect that the former would describe the
+similarity of the documents more accurate than the latter. For
+example, BR 488105 and BR 493035 describe the same topic, but they
+might use \emph{different} terms for the same topic. In BR 493035, the
+words \code{blank}, {\em debugging}, {\em view enhancements}, are used
+to describe VM, while they do not appear in BR 488105.
+
+%Thus, term-based assessment of those two documents might be less
+%accurate/effective than topic-based assessment.
+
+%Actually, using tfidf, a term-weighting scheme, we have calculate the
+%cosine similarity of BR000002 and BR009779 to be 0.5???, too small to
+%be considered as similar documents. In our approach, the topic-based
+%probability that they are duplicated is estimated as 0.8???.
+% topic EDIT in BR2 >> topic EDIT in BR1. (Buggy one!!!)
+
+%Based on aforementioned observations, we propose to use a topic
+%modeling approach for the automatic detection of duplicate bug
+%reports. We utilize and adapt a probabilistic, generative topic model
+%called {\em Relational Topic Model (RTM)}~\cite{RTM} for the analysis
+%and inference of the hidden technical topics within bug reports and
+%the relation of duplicate reports based on their topics. To support
+%software evolution as new reports are constantly filed and new
+%duplication information is available, we extend RTM into {\em
+%incremental} RTM (iRTM) in which the trained model can be quickly
+%updated without fully re-training.
+
+%Next, let us detail our model.
+

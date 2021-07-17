@@ -159,14 +159,14 @@
 \maketitle
 
 \begin{abstract}
-In software development and maintenance, bug fixing is a
-time-consuming, yet unavoidable task. A bug is occasionally reported
-by more than one reporters, resulting in duplicate bug reports.
-Detecting duplicate bug reports is crucial because it helps reduce the
-maintenance efforts from developers as well as provides more
-information in the bug fixing process. In this paper, we propose an
-automatic approach to this problem. In our approach, a bug report is
-considered as a textual document describing one or more technical
+%In software development and maintenance, bug fixing is a
+%time-consuming, yet unavoidable task.
+A bug is occasionally reported by more than one reporters, resulting
+in duplicate bug reports.  Detecting duplicate bug reports is crucial
+because it helps reduce the maintenance efforts from developers as
+well as provides more information in the bug fixing process. In this
+paper, we propose an automatic approach to this problem. A bug report
+is considered as a textual document describing one or more technical
 aspects of a software system, in which some of them might be
 erroneously implemented. The reports similarly describing the same
 erroneous technical aspects are considered as duplicate ones. We
@@ -181,10 +181,10 @@ not-yet-identified duplicate ones.
 %spending a large amount of time for complete re-training when new
 %reports are filed or additional duplication information is
 %available.
-Our empirical evaluation on several large, real-world systems shows
-that iRTM outperforms the state-of-the-art approach, achieving up to
-90\% top-10 accuracy with up to 8 times faster in updating its
-model as new bug reports arrive.
+Our empirical evaluation on several real-world systems shows that our
+model outperforms the state-of-the-art approach, achieving up to 90\%
+top-10 accuracy with up to x8 faster in updating its model as new
+reports arrive.
 \end{abstract}
 
 %\begin{IEEEkeywords}
@@ -192,12 +192,12 @@ model as new bug reports arrive.
 %\end{IEEEkeywords}
 
 \input{ase21-lbr-intro.tex}
-\input{motivation.tex}
-\input{formulation.tex}
-\input{algorithm.tex}
-\input{eval.tex}
-\input{related.tex}
-\input{conclusion.tex}
+\input{ase21-lbr-motivation.tex}
+\input{ase21-lbr-formulation.tex}
+%\input{algorithm.tex}
+\input{ase21-lbr-eval.tex}
+%\input{related.tex}
+%\input{conclusion.tex}
 
 \newpage
 
