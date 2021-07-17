@@ -1,0 +1,102 @@
+\section{Introduction}
+\label{intro}
+
+%In software development and maintenance, fixing software defects
+%(often called bugs) is crucial in software development to produce
+%high-quality products. Bug fixing could occur during development or in
+%post-release time.
+
+Developers, testers, or users of a software system encounter the
+detects and note its incorrect behaviors that do not follow the
+requirements or their expectations. They could report such defects in
+a bug repository that often called bug-tracking database.
+%
+%The process of bug fixing continues with the developers analyzing the
+%phenomenon, locating the defective code, correcting them, and
+%committing the fixed code to the projects' repository.
+%
+Users could interact with a software system in many different ways,
+thus, occasionally, a bug could be filed by multiple reporters. That
+leads to the {\em duplicate bug reports} for the same bugs. Because
+bug reports keep being filed everyday with high pace (e.g., in
+Eclipse, 3-5 new bug reports are often filed every hour), it is~vital
+to detect if a new bug report is a duplicate one. This
+%Detecting whether a new bug report is a duplicate one is crucial
+%because it helps 
+helps reduce the maintenance efforts from developers (e.g., if the bug
+is already fixed) and provides additional information in the bug
+fixing process (e.g., if the bug is not yet fixed).
+%
+However, such automated detection of duplicate bug reports is not
+trivial. With different input data, usage environments or scenarios,
+an erroneous behavior might expose as different phenomena (e.g.,
+different outputs, traces, or screen views). Moreover, different
+reporters might use different terminologies and styles, or report on
+different elements to describe the same phenomena. As a result,
+duplicate bug reports could be textually dissimilar.
+
+%[Tung: we should show this in the motivating examples]
+
+To automate the detection process of duplicate bug reports, we propose
+a probabilistic approach. In our approach, each bug report is
+considered as a textual document describing one or more technical
+aspects/functionality of a system, in which some of them might be
+erroneously implemented. The reports similarly describing the same
+erroneous technical aspects are considered as duplicate
+ones. Considering the technical aspects as the topics of those
+text-based bug reports, we utilize Relational Topic Model
+(RTM)~\cite{RTM}, a probabilistic, generative model, to formulate
+their topic structures and duplication indicators. We use Gibbs
+sampling~\cite{gibb} to train the model on historical data with
+identified duplicate bug reports and then detect other
+not-yet-identified duplicate ones.
+
+% iRTM
+%With software evolution, new reports are continually filed and new
+%duplicate information could also be provided. The trained model should
+%be updated with that new information. Therefore, we extend RTM into
+%{\em incremental} RTM (iRTM) in which the trained model can be updated
+%using a combination of a portion of existing data (historical reports
+%and duplication indicators) and newly provided data (i.e., all new
+%reports and additional duplication indicators). This helps save time
+%on complete re-training on all old and new data, which could be very
+%costly as the number of bug reports increases with a relatively high
+%pace.
+
+%
+Our empirical evaluation on several large, real-world systems shows
+that {\model} outperforms the state-of-the-art approach from Sun {\em
+et al.}~\cite{davidlo10} in terms of both accuracy and time
+efficiency. It can achieve up to 90\% top-10 accuracy, with updating
+time within 0.14 seconds per new bug report on average. The updating
+time for our model with new data is about 5-8 times smaller than the
+re-training time of the Sun {\em et al.}'s approach
+in~\cite{davidlo10}.
+
+%
+%The contributions of this paper include:
+
+%\begin{enumerate}
+
+%\item {\model}, an extended model from RTM to formulate the problem of
+%  detecting duplicate bug reports. {\model} captures semantically the
+%  technical topics in the bug reports and formulates the semantic
+%  similarity measure among duplicate reports based on such topic
+%  structures.
+
+%\item Incremental algorithms for {\model} in a) training the model on
+%historical bug reports and identified duplications, b) detecting
+%not-yet-identified duplicate reports, and c) updating the trained
+%model when new data is available. Such incremental solution supports
+%well the detection of duplicate bug reports in evolving software.
+
+%\item An empirical evaluation showing the accuracy, scalability, and
+%time efficiency of {\model}.
+
+%\end{enumerate}
+
+%The next section presents a motivating example. Section~3 describes
+%the details of our model. Section~4 presents the algorithm for
+%incremental training of the model and detection of duplicate bug
+%reports. Section 5 discusses our evaluation. Related work is in
+%Section 6, and conclusions appear last.
