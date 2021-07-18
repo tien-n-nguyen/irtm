@@ -64,7 +64,9 @@ values of common topics might not be high in both documents).
 \begin{figure}[t]
 \centering
 \includegraphics[width=4.2in]{irtm4}
-\caption{Topic Modeling for Bug Reports~\cite{lda}}
+\vspace{-21pt}
+\caption{Relational Topic Modeling for Bug Reports}
+\vspace{-6pt}
 \label{topicmodel}
 \end{figure}
 
@@ -104,10 +106,10 @@ otherwise. Because we determine the duplication of two bug reports
 based on how similarly they describe the same buggy topics, we define
 a function $\psi(d,d')$ to measure the topic-based similarity of two
 documents and determine the value of $y_{d,d'}$ based on
-$\psi(d,d')$. That is, the higher $\psi(d,d')$ is, the higher
+$\psi(d,d')$. The higher $\psi(d,d')$ is, the higher
 probability that $d$ and $d'$ are duplicate bug reports. In this
 context, $\psi$ is called the {\em duplication indicating
-function}. As suggested in~\cite{RTM}, we use the following function:
+  function}:
 $$\psi(d, d') = exp({\sum\nolimits_{k=1}^K(\eta_k.\theta_{d,k}.\theta_{d',k})+
 \nu})$$ in which $\eta_k$s are the weighted parameters and $\nu$ is a
 smoothening parameter. As seen, this function measures the similarity of
